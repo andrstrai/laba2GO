@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"math"
 	"os"
 	"os/exec"
 	"runtime"
@@ -50,6 +51,14 @@ func type_by_angle(tr triangle) {
 	fmt.Println(answer)
 }
 
+func angles(tr triangle) {
+	a, b, c := float64(tr.side1), float64(tr.side2), float64(tr.side3)
+	A := math.Acos((b*b+c*c-a*a)/(2*b*c)) * 180 / math.Pi
+	B := math.Acos((a*a+c*c-b*b)/(2*a*c)) * 180 / math.Pi
+	C := 180 - A - B
+	fmt.Printf("Угол 1 - %f, угол 2 - %f, угол 3 - %f\n", A, B, C)
+}
+
 func type_by_side(tr triangle) string {
 	if tr.side1 == tr.side2 && tr.side2 == tr.side3 {
 		return "равносторонний"
@@ -95,6 +104,7 @@ func main() {
 		fmt.Println("2 - Расчёт периметра и площади треугольника")
 		fmt.Println("3 - Определение типа треугольника по сторонам")
 		fmt.Println("4 - Определение типа треугольника по углам")
+		fmt.Println("5 - Определение углов треугольника")
 		fmt.Println("0 - Завершить работу")
 		fmt.Println("Выберите пункт из меню управления: ")
 
@@ -116,6 +126,8 @@ func main() {
 			fmt.Println("Треугольник", type_by_side(all_triangles[0]))
 		case 4:
 			type_by_angle(all_triangles[0])
+		case 5:
+			angles(all_triangles[0])
 		default:
 			fmt.Println("Нет такого пункта меню!")
 		}
