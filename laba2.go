@@ -28,6 +28,19 @@ func clear_screen() {
 	cmd.Run()
 }
 
+func type_by_angle(tr triangle) {
+	maxi := max(tr.side1, tr.side2, tr.side3)
+	mini := min(tr.side1, tr.side2, tr.side3)
+	mid := tr.side1 + tr.side2 + tr.side3 - mini - maxi
+	if maxi*maxi == mini*mini+mid*mid {
+		fmt.Println("Треугольник прямоугольный")
+	} else if maxi*maxi < mini*mini+mid*mid {
+		fmt.Println("Треугольник остроугольный")
+	} else {
+		fmt.Println("Треугольник тупоугольный")
+	}
+}
+
 // основная функция
 func main() {
 	all_triangles := []triangle{}
@@ -83,7 +96,7 @@ func main() {
 		case 3:
 			//функция Определения типа треугольника по сторонам
 		case 4:
-			//функция Определения типа треугольника по углам
+			type_by_angle(all_triangles[0])
 		default:
 			fmt.Println("Нет такого пункта меню!")
 		}
