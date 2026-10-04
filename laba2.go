@@ -41,6 +41,16 @@ func type_by_angle(tr triangle) {
 	}
 }
 
+func type_by_side(tr triangle) {
+	if tr.side1 == tr.side2 && tr.side2 == tr.side3 {
+		fmt.Println("Треугольник равносторонний")
+	} else if tr.side1 == tr.side2 || tr.side1 == tr.side3 || tr.side2 == tr.side3 {
+		fmt.Println("Треугольник равнобедренный")
+	} else {
+		fmt.Println("Треугольник разносторонний")
+	}
+}
+
 // основная функция
 func main() {
 	all_triangles := []triangle{}
@@ -94,7 +104,7 @@ func main() {
 		case 2:
 			//функция Расчёта периметра и площади треугольника
 		case 3:
-			//функция Определения типа треугольника по сторонам
+			type_by_side(all_triangles[0])
 		case 4:
 			type_by_angle(all_triangles[0])
 		default:
