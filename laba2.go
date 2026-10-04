@@ -29,25 +29,34 @@ func clear_screen() {
 }
 
 func type_by_angle(tr triangle) {
+	var answer string
 	maxi := max(tr.side1, tr.side2, tr.side3)
 	mini := min(tr.side1, tr.side2, tr.side3)
 	mid := tr.side1 + tr.side2 + tr.side3 - mini - maxi
 	if maxi*maxi == mini*mini+mid*mid {
-		fmt.Println("Треугольник прямоугольный")
+		answer += fmt.Sprintf("Треугольник прямоугольный (прямой угол между катетами %d и %d)", mini, mid)
 	} else if maxi*maxi < mini*mini+mid*mid {
-		fmt.Println("Треугольник остроугольный")
+		answer += "Треугольник остроугольный"
 	} else {
-		fmt.Println("Треугольник тупоугольный")
+		answer += "Треугольник тупоугольный"
 	}
+	if type_by_side(tr) == "равносторонний" {
+		answer += " со всеми равными углами по 60 градусов"
+	} else if type_by_side(tr) == "равнобедренный" {
+		answer += " с двумя равными углами"
+	} else {
+		answer += " со всеми разными углами"
+	}
+	fmt.Println(answer)
 }
 
-func type_by_side(tr triangle) {
+func type_by_side(tr triangle) string {
 	if tr.side1 == tr.side2 && tr.side2 == tr.side3 {
-		fmt.Println("Треугольник равносторонний")
+		return "равносторонний"
 	} else if tr.side1 == tr.side2 || tr.side1 == tr.side3 || tr.side2 == tr.side3 {
-		fmt.Println("Треугольник равнобедренный")
+		return "равнобедренный"
 	} else {
-		fmt.Println("Треугольник разносторонний")
+		return "разносторонний"
 	}
 }
 
@@ -104,7 +113,7 @@ func main() {
 		case 2:
 			//функция Расчёта периметра и площади треугольника
 		case 3:
-			type_by_side(all_triangles[0])
+			fmt.Println("Треугольник", type_by_side(all_triangles[0]))
 		case 4:
 			type_by_angle(all_triangles[0])
 		default:
