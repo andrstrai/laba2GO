@@ -29,14 +29,23 @@ func clear_screen() {
 	cmd.Run()
 }
 
+const epsilon = 1e-9
+
+func float_equal(a, b float64) bool {
+	return math.Abs(a-b) < epsilon
+}
+
 func type_by_angle(tr triangle) {
 	var answer string
 	maxi := max(tr.side1, tr.side2, tr.side3)
 	mini := min(tr.side1, tr.side2, tr.side3)
 	mid := tr.side1 + tr.side2 + tr.side3 - mini - maxi
-	if maxi*maxi == mini*mini+mid*mid {
-		answer += fmt.Sprintf("Треугольник прямоугольный (прямой угол между катетами %d и %d)", mini, mid)
-	} else if maxi*maxi < mini*mini+mid*mid {
+
+	maxi_sq := maxi * maxi
+	summ_sq := mini*mini + mid*mid
+	if float_equal(maxi_sq, summ_sq) {
+		answer += fmt.Sprintf("Треугольник прямоугольный (прямой угол между катетами %.15f и %.15f)", mini, mid)
+	} else if maxi_sq < summ_sq {
 		answer += "Треугольник остроугольный"
 	} else {
 		answer += "Треугольник тупоугольный"
@@ -52,17 +61,30 @@ func type_by_angle(tr triangle) {
 }
 
 func angles(tr triangle) {
-	a, b, c := float64(tr.side1), float64(tr.side2), float64(tr.side3)
+	if type_by_side(tr) == "равносторонний" {
+		fmt.Println("Угол 1 - 60, угол 2 - 60, угол 3 - 60")
+		return
+	}
+	maxi := max(tr.side1, tr.side2, tr.side3)
+	mini := min(tr.side1, tr.side2, tr.side3)
+	mid := tr.side1 + tr.side2 + tr.side3 - mini - maxi
+	if float_equal(maxi*maxi, mini*mini+mid*mid) {
+		alpha := math.Atan2(mini, mid) * 180 / math.Pi
+		beta := 90 - alpha
+		fmt.Printf("Угол 1 - 90, угол 2 - %.15f, угол 3 - %.15f\n", alpha, beta)
+		return
+	}
+	a, b, c := tr.side1, tr.side2, tr.side3
 	A := math.Acos((b*b+c*c-a*a)/(2*b*c)) * 180 / math.Pi
 	B := math.Acos((a*a+c*c-b*b)/(2*a*c)) * 180 / math.Pi
 	C := 180 - A - B
-	fmt.Printf("Угол 1 - %f, угол 2 - %f, угол 3 - %f\n", A, B, C)
+	fmt.Printf("Угол 1 - %.15f, угол 2 - %.15f, угол 3 - %.15f\n", A, B, C)
 }
 
 func type_by_side(tr triangle) string {
-	if tr.side1 == tr.side2 && tr.side2 == tr.side3 {
+	if float_equal(tr.side1, tr.side2) && float_equal(tr.side2, tr.side3) {
 		return "равносторонний"
-	} else if tr.side1 == tr.side2 || tr.side1 == tr.side3 || tr.side2 == tr.side3 {
+	} else if float_equal(tr.side1, tr.side2) || float_equal(tr.side1, tr.side3) || float_equal(tr.side2, tr.side3) {
 		return "равнобедренный"
 	} else {
 		return "разносторонний"
@@ -128,11 +150,11 @@ A:
 				case 2:
 					//функция Расчёта периметра и площади треугольника
 				case 3:
-					fmt.Println("Треугольник", type_by_side(all_triangles[0]))
+					fmt.Println("Треугольник", type_by_side(all_triangles[len(all_triangles)-1]))
 				case 4:
-					type_by_angle(all_triangles[0])
+					type_by_angle(all_triangles[len(all_triangles)-1])
 				case 5:
-					angles(all_triangles[0])
+					angles(all_triangles[len(all_triangles)-1])
 				default:
 					fmt.Println("Нет такого пункта меню!")
 				}
