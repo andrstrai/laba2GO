@@ -29,10 +29,11 @@ func clear_screen() {
 	cmd.Run()
 }
 
-const epsilon = 1e-9
-
 func float_equal(a, b float64) bool {
-	return math.Abs(a-b) < epsilon
+	const eps = 1e-9
+	diff := math.Abs(a - b)
+	scale := math.Max(math.Abs(a), math.Abs(b))
+	return diff <= eps*math.Max(1, scale)
 }
 
 func type_by_angle(tr triangle) {
@@ -120,11 +121,12 @@ A:
 			s2, err2 := strconv.ParseFloat(parts[1], 64)
 			s3, err3 := strconv.ParseFloat(parts[2], 64)
 
-			all_triangles = append(all_triangles, triangle{float64(s1), float64(s2), float64(s3)})
 			if err1 != nil || err2 != nil || err3 != nil || s1 <= 0 || s2 <= 0 || s3 <= 0 {
 				fmt.Println("Некорректный ввод! Пожалуйста, введите положительные числа.")
 				continue
 			}
+			all_triangles = append(all_triangles, triangle{s1, s2, s3})
+
 			for {
 				fmt.Println("Меню команд:")
 				fmt.Println("1 - Проверка существования треугольника")
