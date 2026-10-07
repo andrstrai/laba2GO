@@ -17,6 +17,12 @@ type triangle struct {
 	side3 float64
 }
 
+func (t triangle) ToString() string {
+
+	return fmt.Sprintf("Длина первой стороны: %f\nДлина второй стороны:  %f\nДлина третьей стороны:  %f",
+		t.side1, t.side2, t.side3)
+}
+
 // функция для очистки экрана (работает и на Windows, и на macOS/Linux)
 func clearScreen() {
 	var cmd *exec.Cmd
@@ -134,6 +140,7 @@ A:
 				fmt.Println("3 - Определение типа треугольника по сторонам")
 				fmt.Println("4 - Определение типа треугольника по углам")
 				fmt.Println("5 - Определение углов треугольника")
+				fmt.Println("6 - Вывод всех треугольников")
 				fmt.Println("0 - Выйти из меню команд")
 				fmt.Println("Выберите пункт из меню управления: ")
 
@@ -157,9 +164,19 @@ A:
 					typeByAngle(all_triangles[len(all_triangles)-1])
 				case 5:
 					angles(all_triangles[len(all_triangles)-1])
+				case 6:
+					for i := 0; i < len(all_triangles); i++ {
+						fmt.Println("Треугольник: " + fmt.Sprint(i+1))
+						fmt.Println(all_triangles[i].ToString())
+						fmt.Println("---")
+					}
 				default:
 					fmt.Println("Нет такого пункта меню!")
 				}
+				fmt.Println("Нажмите Enter для продолжения работы......")
+				inputSides, _ := reader.ReadString('\n')
+				inputSides = strings.TrimSpace(inputSides)
+
 			}
 		}
 
