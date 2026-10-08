@@ -17,7 +17,7 @@ type triangle struct {
 	side3 float64
 }
 
-func (t triangle) ToString() string {
+func (t triangle) String() string {
 
 	return fmt.Sprintf("Длина первой стороны: %f\nДлина второй стороны:  %f\nДлина третьей стороны:  %f",
 		t.side1, t.side2, t.side3)
@@ -113,6 +113,10 @@ func perimeterAndArea(tr triangle) (float64, float64) {
 	return perimeter, area
 }
 
+func badSide(x float64) bool {
+	return x <= 0 || math.IsInf(x, 0) || math.IsNaN(x)
+}
+
 // основная функция
 func main() {
 	all_triangles := []triangle{}
@@ -120,7 +124,10 @@ func main() {
 A:
 	for {
 		fmt.Println("Для начала работы пожалуйста, нажмите Enter, для завершения введите 0.....")
-		inputStart, _ := reader.ReadString('\n')
+		inputStart, err := reader.ReadString('\n')
+		if err != nil {
+			return
+		}
 		inputStart = strings.TrimSpace(inputStart)
 		if inputStart == "0" {
 			return
@@ -129,7 +136,11 @@ A:
 
 			fmt.Println("Укажите 3 стороны треугольника через пробел: ")
 
-			inputSides, _ := reader.ReadString('\n')
+			inputSides, err := reader.ReadString('\n')
+			if err != nil {
+				return
+			}
+			inputSides = strings.ReplaceAll(inputSides, ",", ".")
 			inputSides = strings.TrimSpace(inputSides)
 
 			parts := strings.Fields(inputSides)
@@ -142,7 +153,7 @@ A:
 			s2, err2 := strconv.ParseFloat(parts[1], 64)
 			s3, err3 := strconv.ParseFloat(parts[2], 64)
 
-			if err1 != nil || err2 != nil || err3 != nil || s1 <= 0 || s2 <= 0 || s3 <= 0 {
+			if err1 != nil || err2 != nil || err3 != nil || badSide(s1) || badSide(s2) || badSide(s3) {
 				fmt.Println("Некорректный ввод! Пожалуйста, введите положительные числа.")
 				continue
 			}
@@ -159,7 +170,10 @@ A:
 				fmt.Println("0 - Выйти из меню команд")
 				fmt.Println("Выберите пункт из меню управления: ")
 
-				input, _ := reader.ReadString('\n')
+				input, err := reader.ReadString('\n')
+				if err != nil {
+					return
+				}
 				input = strings.TrimSpace(input)
 				a, err := strconv.Atoi(input)
 				if err != nil {
@@ -186,21 +200,31 @@ A:
 				case 3:
 					fmt.Println("Треугольник", typeBySide(last))
 				case 4:
-					typeByAngle(last)
+					if !exists(last) {
+						fmt.Println("Треугольник не существует")
+					} else {
+						typeByAngle(last)
+					}
 				case 5:
-					angles(last)
+					if !exists(last) {
+						fmt.Println("Треугольник не существует")
+					} else {
+						angles(last)
+					}
 				case 6:
 					for i := 0; i < len(all_triangles); i++ {
 						fmt.Println("Треугольник: " + fmt.Sprint(i+1))
-						fmt.Println(all_triangles[i].ToString())
+						fmt.Println(all_triangles[i])
 						fmt.Println("---")
 					}
 				default:
 					fmt.Println("Нет такого пункта меню!")
 				}
 				fmt.Println("Нажмите Enter для продолжения работы......")
-				inputSides, _ := reader.ReadString('\n')
-				inputSides = strings.TrimSpace(inputSides)
+				_, err = reader.ReadString('\n')
+				if err != nil {
+					return
+				}
 
 			}
 		}
