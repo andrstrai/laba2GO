@@ -42,6 +42,14 @@ func floatEqual(a, b float64) bool {
 	return diff <= eps*math.Max(1, scale)
 }
 
+func exists(tr triangle) bool {
+	maxi := max(tr.side1, tr.side2, tr.side3)
+	mini := min(tr.side1, tr.side2, tr.side3)
+	mid := tr.side1 + tr.side2 + tr.side3 - mini - maxi
+	return maxi < mini+mid && !floatEqual(maxi, mini+mid)
+
+}
+
 func typeByAngle(tr triangle) {
 	var answer string
 	maxi := max(tr.side1, tr.side2, tr.side3)
@@ -155,7 +163,11 @@ A:
 				case 0:
 					continue A
 				case 1:
-					//функция Проверки существования треугольника
+					if exists(all_triangles[len(all_triangles)-1]) {
+						fmt.Println("Треугольник существует")
+					} else {
+						fmt.Println("Треугольник не существует")
+					}
 				case 2:
 					//функция Расчёта периметра и площади треугольника
 				case 3:
