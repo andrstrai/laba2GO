@@ -105,12 +105,12 @@ func typeBySide(tr triangle) string {
 	}
 }
 
-func perimetrAndArea(tr triangle) (float64, float64) {
+func perimeterAndArea(tr triangle) (float64, float64) {
 	a, b, c := tr.side1, tr.side2, tr.side3
-	perimetr := a + b + c
-	halfPerimetr := perimetr / 2
-	area := math.Sqrt(halfPerimetr * (halfPerimetr - a) * (halfPerimetr - b) * (halfPerimetr - c))
-	return perimetr, area
+	perimeter := a + b + c
+	halfPerimeter := perimeter / 2
+	area := math.Sqrt(halfPerimeter * (halfPerimeter - a) * (halfPerimeter - b) * (halfPerimeter - c))
+	return perimeter, area
 }
 
 // основная функция
@@ -166,24 +166,29 @@ A:
 					fmt.Println("Некорректный ввод! Пожалуйста, введите число.")
 					continue
 				}
+				last := all_triangles[len(all_triangles)-1]
 				switch a {
 				case 0:
 					continue A
 				case 1:
-					if exists(all_triangles[len(all_triangles)-1]) {
+					if exists(last) {
 						fmt.Println("Треугольник существует")
 					} else {
 						fmt.Println("Треугольник не существует")
 					}
 				case 2:
-					p, s := perimetrAndArea(all_triangles[len(all_triangles)-1])
-					fmt.Printf("Периметр = %.2f, площадь = %.2f\n", p, s)
+					if !exists(last) {
+						fmt.Println("Треугольник не существует, площадь не посчитать")
+					} else {
+						p, s := perimeterAndArea(last)
+						fmt.Printf("Периметр = %.2f, площадь = %.2f\n", p, s)
+					}
 				case 3:
-					fmt.Println("Треугольник", typeBySide(all_triangles[len(all_triangles)-1]))
+					fmt.Println("Треугольник", typeBySide(last))
 				case 4:
-					typeByAngle(all_triangles[len(all_triangles)-1])
+					typeByAngle(last)
 				case 5:
-					angles(all_triangles[len(all_triangles)-1])
+					angles(last)
 				case 6:
 					for i := 0; i < len(all_triangles); i++ {
 						fmt.Println("Треугольник: " + fmt.Sprint(i+1))
