@@ -160,6 +160,9 @@ A:
 			all_triangles = append(all_triangles, triangle{s1, s2, s3})
 
 			for {
+				last := all_triangles[len(all_triangles)-1]
+				fmt.Println("Текущий треугольник:")
+				fmt.Println(last.String() + "\n")
 				fmt.Println("Меню команд:")
 				fmt.Println("1 - Проверка существования треугольника")
 				fmt.Println("2 - Расчёт периметра и площади треугольника")
@@ -180,7 +183,7 @@ A:
 					fmt.Println("Некорректный ввод! Пожалуйста, введите число.")
 					continue
 				}
-				last := all_triangles[len(all_triangles)-1]
+
 				switch a {
 				case 0:
 					continue A
@@ -225,7 +228,7 @@ A:
 				if err != nil {
 					return
 				}
-
+				clearScreen()
 			}
 		}
 
