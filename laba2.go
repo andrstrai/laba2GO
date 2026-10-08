@@ -47,7 +47,6 @@ func exists(tr triangle) bool {
 	mini := min(tr.side1, tr.side2, tr.side3)
 	mid := tr.side1 + tr.side2 + tr.side3 - mini - maxi
 	return maxi < mini+mid && !floatEqual(maxi, mini+mid)
-
 }
 
 func typeByAngle(tr triangle) {
@@ -104,6 +103,14 @@ func typeBySide(tr triangle) string {
 	} else {
 		return "разносторонний"
 	}
+}
+
+func perimetrAndArea(tr triangle) (float64, float64) {
+	a, b, c := tr.side1, tr.side2, tr.side3
+	perimetr := a + b + c
+	halfPerimetr := perimetr / 2
+	area := math.Sqrt(halfPerimetr * (halfPerimetr - a) * (halfPerimetr - b) * (halfPerimetr - c))
+	return perimetr, area
 }
 
 // основная функция
@@ -169,7 +176,8 @@ A:
 						fmt.Println("Треугольник не существует")
 					}
 				case 2:
-					//функция Расчёта периметра и площади треугольника
+					p, s := perimetrAndArea(all_triangles[len(all_triangles)-1])
+					fmt.Printf("Периметр = %.2f, площадь = %.2f\n", p, s)
 				case 3:
 					fmt.Println("Треугольник", typeBySide(all_triangles[len(all_triangles)-1]))
 				case 4:
